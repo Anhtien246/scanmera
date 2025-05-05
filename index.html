@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>📄 Phần mềm Scan tài liệu</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 20px; }
+    video, canvas { width: 100%; max-width: 400px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #downloadLink { display: inline-block; margin-top: 10px; font-size: 16px; text-decoration: none; background: #28a745; color: white; padding: 10px 20px; border-radius: 5px; }
+    #downloadLink:hover { background: #1e7e34; }
+  </style>
+</head>
+<body>
+  <h2>📸 Scan tài liệu bằng Camera</h2>
+  <video id="video" autoplay playsinline></video><br>
+  <button onclick="chupAnh()">📷 Chụp ảnh</button>
+  <br><br>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <br>
+  <a id="downloadLink" style="display:none;" download="scan.jpg">⬇️ Tải ảnh xuống</a>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const link = document.getElementById('downloadLink');
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      video.srcObject = stream;
+    }).catch(err => {
+      alert('Không thể truy cập camera: ' + err);
+    });
+
+    function chupAnh() {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      canvas.style.display = 'block';
+
+      const dataURL = canvas.toDataURL('image/jpeg');
+      link.href = dataURL;
+      link.style.display = 'inline-block';
+      link.textContent = '⬇️ Tải ảnh xuống';
+    }
+  </script>
+</body>
+</html>
